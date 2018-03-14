@@ -1,0 +1,67 @@
+.predominancia{
+    border-radius: 1rem;
+    padding-left: 2.0rem;
+}
+.extensao{
+    border-left: 5px solid #22CBE9;
+}
+.ensino{
+    border-left: 5px solid #F93248;
+}
+.pesquisa{
+    border-left: 5px solid #FF9F3B;
+}
+.chart-icon{
+    margin-top: -25%;
+}
+.chart-desc{
+    text-align: center;
+    color: #555;
+}
+.ext{
+    color: #22CBE9;
+}
+.ens{
+    color: #F93248;
+}
+.pes{
+    color: #FF9F3B;
+}
+#charts{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+#test{
+    fill: #FF9F3B;
+    color: #F93248;
+    background: #555;
+}
+.link-danger{
+    color: #F93248;
+}
+.link-danger:hover{
+    color: rgb(136, 27, 40);
+}
+.panel-event{
+    border-radius: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+.panel-event .panel-heading{
+    border: 1px solid #eee;
+    border-radius: 0;
+    color: #333;
+    background-color: #fff;
+}
+.panel-event .panel-body{
+    background-color: #efefef;
+}
+
+.frame{
+    border-radius: 1rem;
+    border-bottom: 3px solid #555; 
+}
+
+iframe {
+    border: none;
+}
