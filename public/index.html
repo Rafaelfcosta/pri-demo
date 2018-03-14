@@ -50,14 +50,18 @@
                         PRI controller
                     </a>
                 </div>
-
                 <ul class="nav">
                     <li class="active">
                         <a href=".">
                             <i class="pe-7s-display1"></i>
                             <p>Início</p>
                         </a>
+                        <a href="https://pri-control.herokuapp.com/cadastrar.html">
+                            <i class="pe-7s-alarm"></i>
+                            <p>Cadastrar Eventos</p>
+                        </a>
                     </li>
+                    
 
                 </ul>
             </div>
@@ -86,6 +90,29 @@
                                 <div class="header">
                                     <h4 class="title">Docentes</h4>
                                     <p class="category">Clique no nome de um docente abaixo para ver os dados de sua promoção/progressão</p>
+                                    <div>&nbsp;</div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <form class="form-group">
+                                                <label for="search_code">Código de Pessoa:</label>
+                                                <input type="text" id="search_code">
+
+                                                <button id="button_search_code" style="width: 100px;" >Pesquisar</button>
+                                                <button id="button_clear_code" style="width: 100px;">Limpar</button>
+                                            </form>
+                                            <form class="form-group">
+                                                    <label for="search_name">Nome:</label>
+                                                    <input type="text" id="search_name">
+
+    
+                                                    <button id="button_search_name" style="width: 100px;" >Pesquisar</button>
+                                                    <button id="button_clear_name" style="width: 100px;">Limpar</button>
+                                                </form>
+                                                <!--
+                                            <a href="javascript:showSortedByName()">[Ordenar por nome]</a> - <a href="javascript:showSortedByProductivity()">[Ordenar pelos mais produtivos]</a>
+                                                -->
+                                        </div>                                        
+                                    </div>
                                 </div>
                                 <div class="content">
                                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -141,17 +168,124 @@
     
     <script>
 
+        var usersGlobal
+        var selectedSort = 1
+
         $(document).ready(() => {
+            showSortedByName()
 
-            $.get('assets/js/test.json', (users) => {
-                for (var i = 0; i < users.length; i++){
+            $('#search_code').focus()
 
-                    var url = "demo/" + users[i].code + '?name=' + users[i].name
-                    console.log(users[i].name)
-                    $('#accordion').append('<div><a href="' + url + '">' + users[i].name + '</a></div>')
+            $('#button_search_name').click((evt)=>{
+                var name = $('#search_name').val().toLowerCase().trim()
+                if (name.length == 0){
+                    alert('Por favor informe um nome')
+                    $('#search_name').val('')
+                    $('#search_name').focus()
                 }
+                else {
+                    var ids = []
+                    for (var i = 0; i < usersGlobal.length; i++){
+                        var user = usersGlobal[i]
+
+                        if (user.name.toLowerCase().indexOf(name) !== -1){
+                            var id = "#user_" + user.code
+                            ids.push(id)
+                        }
+                    }
+                    
+                    if (ids.length > 0){
+                        var divs = $('.user_div')
+                        
+                        for (var j = 0; j < ids.length; j++){
+                            divs = divs.not(ids[j])
+                        }
+                        
+                        divs.remove()
+                    }
+                }
+
+                evt.preventDefault()
+
+                return false
+
+                evt.preventDefault()
+                return false
+            })
+
+            $('#button_clear_name').click((evt)=>{
+                $('#search_name').val('')
+                $('#search_name').focus()
+
+                if (selectedSort == 1){
+                    showSortedByName()
+                }
+                else if (selectedSort == 2){
+                    showSortedByProductivity()
+                }
+                evt.preventDefault()
+
+                return false
+            })
+
+            $('#button_search_code').click((evt)=>{
+                var code = $('#search_code').val()
+                if (code.trim().length == 0){
+                    alert('Por favor informe um código')
+                    $('#search_code').val('')
+                    $('#search_code').focus()
+                }
+                else {
+                    var id = "#user_" + code
+                    $('.user_div:not(' + id + ')').remove()     
+                }
+
+                evt.preventDefault()
+
+                return false
+            })
+
+            $('#button_clear_code').click((evt) =>{
+                $('#search_code').val('')
+                $('#search_code').focus()
+
+                if (selectedSort == 1){
+                    showSortedByName()
+                }
+                else if (selectedSort == 2){
+                    showSortedByProductivity()
+                }
+
+                evt.preventDefault()
+                return false
             })
         })
+
+        function showSortedByName(){
+            show('sort_by_name.json')
+            selectedSort = 1
+        }
+
+        function showSortedByProductivity(){
+            selectedSort = 2
+            show('sort_by_productivity.json')
+        }
+
+        function show(jsonFile){
+            $.get('assets/friday_the_13th/' + jsonFile, (users) => {
+
+                usersGlobal = users
+
+                $('#accordion').empty()
+
+                for (var i = 0; i < users.length; i++){
+                    
+                    var url = "demo/" + users[i].code + '?name=' + users[i].name
+                    
+                    $('#accordion').append('<div class="user_div" id="user_' + users[i].code + '"><a href="' + url + '">' + users[i].name + '</a></div>')
+                }
+            })
+        }
 
     </script>
 </body>
